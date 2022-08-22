@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Characters.Controllers
 {
-    public class TopdownController : MonoBehaviour, ICharacterController
+    public class TopdownController : BaseCharacterController
     {
         [SerializeField] private CameraDataSo _cameraData;
         [SerializeField] private PlayerMovementPropertiesSo _movementProperties;
@@ -21,27 +21,25 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
 
         private Action _onDashComplete;
 
-        private ICharacterMovement _characterMovement;
-
-        private void OnEnable()
+        protected override void OnEnable()
         {
-            _characterMovement = gameObject.GetInterface<ICharacterMovement>();
-            _characterMovement.MoveInDirection(Vector3.zero);
+            base.OnEnable();
+            
             _dashTimer = _movementProperties.DashDuration;
         }
 
-        public void SetMoveDirection(Vector2 direction)
+        public override void SetMoveDirection(Vector2 direction)
         {
             var rotatedMove = direction.Rotate(90 - _cameraData.YRotation);
             _lateralMovement = new Vector3(rotatedMove.x, 0, rotatedMove.y) * _movementProperties.Speed;
         }
 
-        public void Jump()
+        public override void Jump()
         {
             throw new System.NotImplementedException();
         }
 
-        public void Dash(Action onComplete)
+        public override void Dash(Action onComplete)
         {
             _dashDirection = _playerRotation.forward * _movementProperties.DashSpeed;
             _dashTimer = 0;
@@ -49,7 +47,7 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             _onDashComplete = onComplete;
         }
 
-        public void FixedTick()
+        public override void FixedTick()
         {
             var dashPercentage = 0f;
             if (_dashTimer < _movementProperties.DashDuration)
@@ -67,8 +65,8 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             var dashVelocity = Vector3.Lerp(_dashDirection, _dashDirection * .1f, dashPercentage);
             var moveDirection = _lateralMovement + dashVelocity;
 
-            _characterMovement.MoveInDirection(moveDirection);
-            _characterMovement.FixedTick();
+            characterMovement.MoveInDirection(moveDirection);
+            characterMovement.FixedTick();
         }
     }
 }
