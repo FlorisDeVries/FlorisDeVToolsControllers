@@ -3,7 +3,7 @@
 namespace FlorisDeVToolsControllers.Characters.Player
 {
     [CreateAssetMenu(fileName = "Player Movement Properties",
-        menuName = "Characters/Player/Player Movement Properties")]
+        menuName = "FlorisDeVTools/Characters/Player/Player Movement Properties")]
     public class PlayerMovementPropertiesSo : ScriptableObject
     {
         [Header("DefaultMovement")]

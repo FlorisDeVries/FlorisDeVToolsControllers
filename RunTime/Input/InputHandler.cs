@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 namespace FlorisDeVToolsControllers.Input
 {
-    [CreateAssetMenu(fileName = "InputHandler", menuName = "GameSetup/Input Handler")]
+    [CreateAssetMenu(fileName = "InputHandler", menuName = "FlorisDeVTools/GameSetup/Input Handler")]
     public class InputHandler : ScriptableObject, FlorisDeVToolsInput.IGameplayActions
     {
         public event UnityAction<Vector2> OnMoveEvent = delegate { };
