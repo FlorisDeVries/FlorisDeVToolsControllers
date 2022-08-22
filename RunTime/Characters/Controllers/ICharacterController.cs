@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Controllers
+namespace FlorisDeVToolsControllers.Characters.Controllers
 {
     public interface ICharacterController
     {

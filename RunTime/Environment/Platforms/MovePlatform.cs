@@ -1,7 +1,7 @@
 using FlorisDeVToolsMathLibrary;
 using UnityEngine;
 
-namespace FlorisDeVTools.Environment.Platforms
+namespace FlorisDeVToolsControllers.Environment.Platforms
 {
     [RequireComponent(typeof(Rigidbody))]
     public class MovePlatform : MonoBehaviour

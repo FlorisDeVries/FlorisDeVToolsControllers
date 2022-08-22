@@ -1,7 +1,6 @@
-﻿using JetBrains.Annotations;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Movement.Dtos
+namespace FlorisDeVToolsControllers.Characters.Dtos
 {
     public class GroundInformationDto
     {

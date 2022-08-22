@@ -1,10 +1,9 @@
-using System;
-using FlorisDeVTools.Characters.Movement.Dtos;
+using FlorisDeVToolsControllers.Characters.Dtos;
 using FlorisDeVToolsUnityExtensions.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Movement
+namespace FlorisDeVToolsControllers.Characters.Movement
 {
     public class RigidBodyMovement : MonoBehaviour, ICharacterMovement
     {

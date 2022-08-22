@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Movement
+namespace FlorisDeVToolsControllers.Characters.Movement
 {
     public interface ICharacterMovement
     {

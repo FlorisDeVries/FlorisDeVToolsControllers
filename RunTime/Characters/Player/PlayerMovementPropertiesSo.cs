@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Player
+namespace FlorisDeVToolsControllers.Characters.Player
 {
     [CreateAssetMenu(fileName = "Player Movement Properties",
         menuName = "Characters/Player/Player Movement Properties")]

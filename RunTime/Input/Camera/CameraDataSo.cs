@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace FlorisDeVTools.Input.Camera
+namespace FlorisDeVToolsControllers.Input.Camera
 {
     [CreateAssetMenu(fileName = "CameraDataSo", menuName = "GameSetup/CameraDataSo")]
     public class CameraDataSo : ScriptableObject

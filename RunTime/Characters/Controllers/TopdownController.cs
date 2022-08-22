@@ -1,12 +1,12 @@
 ﻿using System;
-using FlorisDeVTools.Characters.Movement;
-using FlorisDeVTools.Characters.Player;
-using FlorisDeVTools.Input.Camera;
+using FlorisDeVToolsControllers.Characters.Movement;
+using FlorisDeVToolsControllers.Characters.Player;
+using FlorisDeVToolsControllers.Input.Camera;
 using FlorisDeVToolsUnityExtensions.Extensions;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace FlorisDeVTools.Characters.Controllers
+namespace FlorisDeVToolsControllers.Characters.Controllers
 {
     public class TopdownController : MonoBehaviour, ICharacterController
     {
