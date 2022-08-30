@@ -8,6 +8,7 @@ namespace FlorisDeVToolsControllers.Environment.Platforms
     {
         [SerializeField] private float _moveDuration = 3f;
         [SerializeField] private Vector3 _targetOffset;
+        [SerializeField] private Transform _target;
 
         private Rigidbody _rigidbody;
         private Vector3 _startPosition;
@@ -19,7 +20,16 @@ namespace FlorisDeVToolsControllers.Environment.Platforms
             _rigidbody.isKinematic = true;
 
             _startPosition = transform.position;
-            _targetPosition = _startPosition + _targetOffset;
+
+            if (_target)
+            {
+                _targetPosition = _target.position;
+            }
+            else
+            {
+                _targetPosition = _startPosition + _targetOffset;
+            }
+
         }
 
         private void FixedUpdate()
