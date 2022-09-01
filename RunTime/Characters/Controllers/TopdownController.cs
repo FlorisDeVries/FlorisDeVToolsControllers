@@ -68,5 +68,10 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             characterMovement.MoveInDirection(moveDirection);
             characterMovement.FixedTick();
         }
+
+        public override Vector2 GetHorizontalMovement()
+        {
+            return new Vector2(_lateralMovement.x, _lateralMovement.y);
+        }
     }
 }

@@ -23,5 +23,6 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
         public abstract void Dash(Action onComplete);
 
         public abstract void FixedTick();
+        public abstract Vector2 GetHorizontalMovement();
     }
 }

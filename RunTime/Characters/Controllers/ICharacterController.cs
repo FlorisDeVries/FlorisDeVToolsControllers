@@ -9,5 +9,6 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
         void Jump();
         void Dash(Action onComplete);
         void FixedTick();
+        Vector2 GetHorizontalMovement();
     }
 }
