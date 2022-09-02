@@ -11,7 +11,6 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
 
         protected virtual void OnEnable()
         {
-            Debug.Log("Enabled");
             characterMovement = gameObject.GetInterface<ICharacterMovement>();
             characterMovement.MoveInDirection(Vector3.zero);
         }
