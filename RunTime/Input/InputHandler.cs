@@ -15,7 +15,7 @@ namespace FlorisDeVToolsControllers.Input
         public event UnityAction<float> OnRotateCameraEvent = delegate { };
 
         public event UnityAction<bool> OnEnableCameraRotationEvent = delegate { };
-        public event UnityAction<bool> OnJumpFromLedgeEvent = delegate { };
+        public event UnityAction<bool> OnJumpEvent = delegate { };
         public event UnityAction<bool> OnDashEvent = delegate { };
         public event UnityAction<bool> OnAttackEvent = delegate { };
 
@@ -72,15 +72,15 @@ namespace FlorisDeVToolsControllers.Input
             }
         }
 
-        public void OnJumpFromLedge(InputAction.CallbackContext context)
+        public void OnJump(InputAction.CallbackContext context)
         {
             if (context.performed)
             {
-                OnJumpFromLedgeEvent.Invoke(true);
+                OnJumpEvent.Invoke(true);
             }
             else if (context.canceled)
             {
-                OnJumpFromLedgeEvent.Invoke(false);
+                OnJumpEvent.Invoke(false);
             }
         }
 

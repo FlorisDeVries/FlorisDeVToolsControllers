@@ -20,22 +20,29 @@ namespace FlorisDeVToolsControllers.Characters.Movement
         [SerializeField] private float _slopeSlideSpeed = 5f;
         [SerializeField] private float _maxSlideSpeed = 20f;
 
+        [Header("Jumping and air control")] 
+        [SerializeField] private float _fallMultiplier = 2;
+        [SerializeField] private float _jumpRiseFallOff = 1;
+        [SerializeField] private float _maxRiseSpeed = 10; 
+        [SerializeField] private float _maxFallSpeed = -10; 
+
         private Rigidbody _rigidbody;
         private Transform _cachedTransform;
 
         private Vector3 _moveDirection;
         private Vector3 _projectedMoveDirectionOnSlope;
 
-        private float _verticalVelocity;
+        private float _verticalInput;
         private GroundInformationDto _groundInformation = new();
         private float _slideTimer = 0f;
 
 
         #region Info Panel
+
         [FoldoutGroup("Info")]
         [ReadOnly]
         [ShowInInspector]
-        private bool IsOnGround => _groundInformation.IsGrounded;
+        public bool IsGrounded => _groundInformation.IsGrounded;
 
         [FoldoutGroup("Info")]
         [ReadOnly]
@@ -46,6 +53,7 @@ namespace FlorisDeVToolsControllers.Characters.Movement
         [ReadOnly]
         [ShowInInspector]
         private bool IsOnPlatform => _groundInformation.IsOnKinematicPlatform;
+
         #endregion
 
         private void OnEnable()
@@ -125,13 +133,38 @@ namespace FlorisDeVToolsControllers.Characters.Movement
 
         private Vector3 HandleGravity(Vector3 direction)
         {
-            _verticalVelocity = Mathf.Min(_rigidbody.velocity.y, 0);
-            return direction + new Vector3(0, _verticalVelocity, 0);
+            var currentVelocity = _rigidbody.velocity.y;
+            if (_verticalInput <= 0)
+            {
+                currentVelocity =  Mathf.Min(currentVelocity, _verticalInput);
+            }
+            float verticalVelocity;
+            
+            // Override while receiving verticalInput
+            if (_verticalInput > 0)
+            {
+                verticalVelocity = _verticalInput;
+                _verticalInput += Physics.gravity.y * _jumpRiseFallOff * Time.fixedDeltaTime;
+            }
+            else
+            {
+                verticalVelocity = currentVelocity + (Physics.gravity.y * _fallMultiplier * Time.fixedDeltaTime);
+            }
+
+            verticalVelocity = Mathf.Clamp(verticalVelocity, _maxFallSpeed, _maxRiseSpeed);
+            
+            // var verticalVelocity = Mathf.Min(_rigidbody.velocity.y, 0);
+            return direction + new Vector3(0, verticalVelocity, 0);
         }
 
         public void MoveInDirection(Vector3 direction)
         {
             _moveDirection = direction;
+        }
+
+        public void SetVerticalImpulse(float verticalInput)
+        {
+            _verticalInput = verticalInput;
         }
 
         private void OnDrawGizmosSelected()
@@ -156,6 +189,10 @@ namespace FlorisDeVToolsControllers.Characters.Movement
             // SlopeDown Direction
             Gizmos.color = Color.magenta;
             ExtraGizmos.DrawArrow(_cachedTransform.position, _groundInformation.SlopeDownDirection);
+
+            // SlopeDown Direction
+            Gizmos.color = Color.yellow;
+            ExtraGizmos.DrawArrow(_cachedTransform.position, Vector3.up * _verticalInput);
         }
     }
 }

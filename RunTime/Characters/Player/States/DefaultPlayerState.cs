@@ -23,6 +23,7 @@ namespace FlorisDeVToolsControllers.Characters.Player.States
 
             _inputHandler.OnDashEvent += Dash;
             _inputHandler.OnMoveEvent += Move;
+            _inputHandler.OnJumpEvent += Jump;
         }
 
         public override void Exit()
@@ -30,6 +31,7 @@ namespace FlorisDeVToolsControllers.Characters.Player.States
             base.Exit();
             _inputHandler.OnDashEvent -= Dash;
             _inputHandler.OnMoveEvent -= Move;
+            _inputHandler.OnJumpEvent -= Jump;
         }
 
         public override void FixedUpdate()
@@ -50,6 +52,11 @@ namespace FlorisDeVToolsControllers.Characters.Player.States
                 return;
 
             owner.StateMachine.ChangeState(PlayerState.Dashing);
+        }
+        
+        private void Jump(bool shouldJump)
+        {
+            _characterController.Jump(shouldJump);
         }
     }
 }

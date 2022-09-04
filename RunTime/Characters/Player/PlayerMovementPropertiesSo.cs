@@ -13,6 +13,9 @@ namespace FlorisDeVToolsControllers.Characters.Player
         [SerializeField] private float _dashDuration = 1f;
         [SerializeField] private float _dashChannelDuration = .2f;
         [SerializeField] private float _dashSpeed = 20f;
+        
+        [Header("Jumping")] 
+        [SerializeField] private float _jumpForce = 10f;
 
         #region Properties
         // Default movement
@@ -21,6 +24,9 @@ namespace FlorisDeVToolsControllers.Characters.Player
         // Dashing
         public float DashDuration => _dashDuration;
         public float DashSpeed => _dashSpeed;
+        
+        // Jumping
+        public float JumpForce => _jumpForce;
         
         public Vector2 MoveInput { get; private set; }
         #endregion

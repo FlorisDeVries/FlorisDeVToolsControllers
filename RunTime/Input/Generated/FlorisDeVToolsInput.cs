@@ -82,6 +82,15 @@ namespace FlorisDeVToolsControllers.Input.Generated
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""c96b32c2-3c72-482c-a576-621ac7700c52"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -242,11 +251,22 @@ namespace FlorisDeVToolsControllers.Input.Generated
                 {
                     ""name"": """",
                     ""id"": ""556208d5-ae29-4769-9cb1-9d1bb0992214"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Dash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8f4ed832-03e1-44d9-b37c-236a2afd9d5f"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -263,6 +283,7 @@ namespace FlorisDeVToolsControllers.Input.Generated
             m_Gameplay_RotateCamera = m_Gameplay.FindAction("RotateCamera", throwIfNotFound: true);
             m_Gameplay_EnableCameraRotation = m_Gameplay.FindAction("EnableCameraRotation", throwIfNotFound: true);
             m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+            m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -328,6 +349,7 @@ namespace FlorisDeVToolsControllers.Input.Generated
         private readonly InputAction m_Gameplay_RotateCamera;
         private readonly InputAction m_Gameplay_EnableCameraRotation;
         private readonly InputAction m_Gameplay_Dash;
+        private readonly InputAction m_Gameplay_Jump;
         public struct GameplayActions
         {
             private @FlorisDeVToolsInput m_Wrapper;
@@ -338,6 +360,7 @@ namespace FlorisDeVToolsControllers.Input.Generated
             public InputAction @RotateCamera => m_Wrapper.m_Gameplay_RotateCamera;
             public InputAction @EnableCameraRotation => m_Wrapper.m_Gameplay_EnableCameraRotation;
             public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+            public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
             public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -365,6 +388,9 @@ namespace FlorisDeVToolsControllers.Input.Generated
                     @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                     @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                     @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
+                    @Jump.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                    @Jump.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
+                    @Jump.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnJump;
                 }
                 m_Wrapper.m_GameplayActionsCallbackInterface = instance;
                 if (instance != null)
@@ -387,6 +413,9 @@ namespace FlorisDeVToolsControllers.Input.Generated
                     @Dash.started += instance.OnDash;
                     @Dash.performed += instance.OnDash;
                     @Dash.canceled += instance.OnDash;
+                    @Jump.started += instance.OnJump;
+                    @Jump.performed += instance.OnJump;
+                    @Jump.canceled += instance.OnJump;
                 }
             }
         }
@@ -399,6 +428,7 @@ namespace FlorisDeVToolsControllers.Input.Generated
             void OnRotateCamera(InputAction.CallbackContext context);
             void OnEnableCameraRotation(InputAction.CallbackContext context);
             void OnDash(InputAction.CallbackContext context);
+            void OnJump(InputAction.CallbackContext context);
         }
     }
 }

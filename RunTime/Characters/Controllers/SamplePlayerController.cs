@@ -8,23 +8,32 @@ using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Characters.Controllers
 {
-    public class TopdownController : BaseCharacterController
+    public class SamplePlayerController : BaseCharacterController
     {
+        [Header("Required References")]
         [SerializeField] private CameraDataSo _cameraData;
         [SerializeField] private PlayerMovementPropertiesSo _movementProperties;
         [SerializeField] private Transform _playerRotation;
 
+        [Header("Movement properties")]
         [ShowInInspector] private Vector3 _lateralMovement = Vector3.zero;
 
+        [Header("Dashing properties")]
         [ShowInInspector] private Vector3 _dashDirection = Vector3.zero;
-        private float _dashTimer = 0f;
 
+        [Header("Jumping properties")]
+        [Tooltip("For how long the player can keep the jump button pressed to increase jump height")]
+        [ShowInInspector] private float _maxJumpDuration = .2f;
+
+        private float _dashTimer = 0f;
         private Action _onDashComplete;
+        private bool _jump = false;
+        private float _jumpTimer = 0f;
 
         protected override void OnEnable()
         {
             base.OnEnable();
-            
+
             _dashTimer = _movementProperties.DashDuration;
         }
 
@@ -34,17 +43,27 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             _lateralMovement = new Vector3(rotatedMove.x, 0, rotatedMove.y) * _movementProperties.Speed;
         }
 
-        public override void Jump()
+        public override void Jump(bool jump, Action onJumpComplete = null)
         {
-            throw new System.NotImplementedException();
+            if (!characterMovement.IsGrounded)
+            {
+                return;
+            }
+            
+            _jump = jump;
+
+            if (jump)
+            {
+                _jumpTimer = _maxJumpDuration;
+            }
         }
 
-        public override void Dash(Action onComplete)
+        public override void Dash(Action onDashComplete)
         {
             _dashDirection = _playerRotation.forward * _movementProperties.DashSpeed;
             _dashTimer = 0;
 
-            _onDashComplete = onComplete;
+            _onDashComplete = onDashComplete;
         }
 
         public override void FixedTick()
@@ -64,6 +83,17 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
 
             var dashVelocity = Vector3.Lerp(_dashDirection, _dashDirection * .1f, dashPercentage);
             var moveDirection = _lateralMovement + dashVelocity;
+
+            if (_jump)
+            {
+                characterMovement.SetVerticalImpulse(_movementProperties.JumpForce);
+
+                _jumpTimer -= Time.fixedDeltaTime;
+                if (_jumpTimer < 0)
+                {
+                    _jump = false;
+                }
+            }
 
             characterMovement.MoveInDirection(moveDirection);
             characterMovement.FixedTick();
