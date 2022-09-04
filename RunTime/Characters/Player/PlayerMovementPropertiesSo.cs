@@ -14,8 +14,10 @@ namespace FlorisDeVToolsControllers.Characters.Player
         [SerializeField] private float _dashChannelDuration = .2f;
         [SerializeField] private float _dashSpeed = 20f;
         
-        [Header("Jumping")] 
+        [Header("Jumping")]
         [SerializeField] private float _jumpForce = 10f;
+        [Tooltip("For how long the player can keep the jump button pressed to increase jump height")]
+        [SerializeField] private float _maxJumpDuration = .2f;
 
         #region Properties
         // Default movement
@@ -27,6 +29,7 @@ namespace FlorisDeVToolsControllers.Characters.Player
         
         // Jumping
         public float JumpForce => _jumpForce;
+        public float MaxJumpDuration => _maxJumpDuration;
         
         public Vector2 MoveInput { get; private set; }
         #endregion

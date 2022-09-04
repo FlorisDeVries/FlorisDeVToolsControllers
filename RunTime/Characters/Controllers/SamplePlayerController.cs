@@ -10,20 +10,17 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
 {
     public class SamplePlayerController : BaseCharacterController
     {
-        [Header("Required References")]
-        [SerializeField] private CameraDataSo _cameraData;
+        [Header("Required References")] [SerializeField]
+        private CameraDataSo _cameraData;
+
         [SerializeField] private PlayerMovementPropertiesSo _movementProperties;
         [SerializeField] private Transform _playerRotation;
 
-        [Header("Movement properties")]
-        [ShowInInspector] private Vector3 _lateralMovement = Vector3.zero;
+        [Header("Movement properties")] [ShowInInspector]
+        private Vector3 _lateralMovement = Vector3.zero;
 
-        [Header("Dashing properties")]
-        [ShowInInspector] private Vector3 _dashDirection = Vector3.zero;
-
-        [Header("Jumping properties")]
-        [Tooltip("For how long the player can keep the jump button pressed to increase jump height")]
-        [ShowInInspector] private float _maxJumpDuration = .2f;
+        [Header("Dashing properties")] [ShowInInspector]
+        private Vector3 _dashDirection = Vector3.zero;
 
         private float _dashTimer = 0f;
         private Action _onDashComplete;
@@ -45,17 +42,19 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
 
         public override void Jump(bool jump, Action onJumpComplete = null)
         {
+            if (!jump)
+            {
+                _jump = false;
+                return;
+            }
+
             if (!characterMovement.IsGrounded)
             {
                 return;
             }
-            
-            _jump = jump;
 
-            if (jump)
-            {
-                _jumpTimer = _maxJumpDuration;
-            }
+            _jump = true;
+            _jumpTimer = _movementProperties.MaxJumpDuration;
         }
 
         public override void Dash(Action onDashComplete)
