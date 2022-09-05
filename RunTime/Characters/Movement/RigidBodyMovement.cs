@@ -162,7 +162,7 @@ namespace FlorisDeVToolsControllers.Characters.Movement
             _moveDirection = direction;
         }
 
-        public void SetVerticalImpulse(float verticalInput)
+        public void SetVerticalInput(float verticalInput)
         {
             _verticalInput = verticalInput;
         }

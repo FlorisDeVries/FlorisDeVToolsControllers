@@ -26,6 +26,13 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
         private Action _onDashComplete;
         private bool _jump = false;
         private float _jumpTimer = 0f;
+        private int _jumpCount = 0;
+
+        // For coyote time
+        private float _timeSinceLastJumpPress = 0f;
+        private float _timeSinceLastGrounded = 0f;
+        private const float LandStutterTime = .05f;
+
 
         protected override void OnEnable()
         {
@@ -40,22 +47,16 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             _lateralMovement = new Vector3(rotatedMove.x, 0, rotatedMove.y) * _movementProperties.Speed;
         }
 
-        public override void Jump(bool jump, Action onJumpComplete = null)
+        public override void FixedTick()
         {
-            if (!jump)
-            {
-                _jump = false;
-                return;
-            }
+            JumpLogic();
 
-            if (!characterMovement.IsGrounded)
-            {
-                return;
-            }
-
-            _jump = true;
-            _jumpTimer = _movementProperties.MaxJumpDuration;
+            var moveDirection = _lateralMovement + DashLogic();
+            characterMovement.MoveInDirection(moveDirection);
+            characterMovement.FixedTick();
         }
+
+        #region Dashing
 
         public override void Dash(Action onDashComplete)
         {
@@ -65,7 +66,7 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
             _onDashComplete = onDashComplete;
         }
 
-        public override void FixedTick()
+        private Vector3 DashLogic()
         {
             var dashPercentage = 0f;
             if (_dashTimer < _movementProperties.DashDuration)
@@ -80,23 +81,102 @@ namespace FlorisDeVToolsControllers.Characters.Controllers
                 _onDashComplete?.Invoke();
             }
 
-            var dashVelocity = Vector3.Lerp(_dashDirection, _dashDirection * .1f, dashPercentage);
-            var moveDirection = _lateralMovement + dashVelocity;
+            return Vector3.Lerp(_dashDirection, _dashDirection * .1f, dashPercentage);
+        }
 
-            if (_jump)
+        #endregion
+
+        #region Jumping
+        public override void Jump(bool jump, Action onJumpComplete = null)
+        {
+            if (!jump)
             {
-                characterMovement.SetVerticalImpulse(_movementProperties.JumpForce);
-
-                _jumpTimer -= Time.fixedDeltaTime;
-                if (_jumpTimer < 0)
-                {
-                    _jump = false;
-                }
+                _jump = false;
+                return;
+            }
+            
+            _timeSinceLastJumpPress = 0;
+            
+            // Handle air jumps
+            if (_jumpCount > 0)
+            {
+                InitiateJump();
+                return;
             }
 
-            characterMovement.MoveInDirection(moveDirection);
-            characterMovement.FixedTick();
+            if (!characterMovement.IsGrounded)
+            {
+                CheckGroundedCoyote();
+                return;
+            }
+
+            InitiateJump();
         }
+
+        private void JumpLogic()
+        {
+            // Update timers
+            _timeSinceLastJumpPress += Time.fixedDeltaTime;
+
+            if (characterMovement.IsGrounded)
+            {
+                // Sometimes IsGrounded can stutter, quickly swapping true/false 
+                if (_timeSinceLastGrounded > LandStutterTime)
+                {
+                    // Just landed
+                    _jumpCount = 0;
+                    CheckJumpCoyote();
+                }
+
+                _timeSinceLastGrounded = 0;
+            }
+            else
+                _timeSinceLastGrounded += Time.fixedDeltaTime;
+
+            if (!_jump) return;
+
+            characterMovement.SetVerticalInput(_movementProperties.JumpForce);
+
+            _jumpTimer -= Time.fixedDeltaTime;
+            if (_jumpTimer < 0)
+            {
+                _jump = false;
+            }
+        }
+
+        private void CheckGroundedCoyote()
+        {
+            if (_timeSinceLastGrounded > _movementProperties.IsGroundedCoyoteTime)
+            {
+                return;
+            }
+
+            InitiateJump();
+        }
+
+        private void CheckJumpCoyote()
+        {
+            if (_timeSinceLastJumpPress > _movementProperties.JumpButtonCoyoteTime)
+            {
+                return;
+            }
+
+            InitiateJump();
+        }
+
+        private void InitiateJump()
+        {
+            if (_jumpCount > _movementProperties.AirJumps)
+            {
+                return;
+            }
+            
+            _jumpCount++;
+            _jump = true;
+            _jumpTimer = _movementProperties.MaxJumpDuration;
+        }
+
+        #endregion
 
         public override Vector2 GetHorizontalMovement()
         {
