@@ -1,6 +1,6 @@
 {
   "name": "com.florisdev.controllers",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "displayName": "FlorisDeV Movement and Controllers",
   "description": "Different scripts used to move objects around in the scene",
   "unity": "2021.3",
