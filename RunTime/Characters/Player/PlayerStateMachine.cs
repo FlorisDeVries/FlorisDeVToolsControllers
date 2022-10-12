@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Characters.Player
 {
-    public class PlayerStateMachine : FsmMonobehaviour<PlayerState, PlayerStateMachine>
+    public class PlayerStateMachine : FsmMonobehaviour<PlayerState, PlayerStateMachine, BaseState<PlayerStateMachine>>
     {
         [SerializeField] private InputHandler _inputHandler;
         [SerializeField] private ICharacterController _characterController;
@@ -38,7 +38,7 @@ namespace FlorisDeVToolsControllers.Characters.Player
                 { PlayerState.Combat , new EmptyPlayerState(this)}
             };
 
-            StateMachine = new FiniteStateMachine<PlayerState, PlayerStateMachine>(statesDefinition);
+            StateMachine = new FiniteStateMachine<PlayerState, PlayerStateMachine, BaseState<PlayerStateMachine>>(statesDefinition);
         }
     }
 }
