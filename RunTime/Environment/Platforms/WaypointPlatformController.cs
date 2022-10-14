@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FlorisDeVToolsFSM.UnityExtensions;
 using FlorisDeVToolsMathLibrary;
 using FlorisDeVToolsUnityExtensions.Extensions;
 using Sirenix.OdinInspector;
@@ -13,7 +14,7 @@ namespace FlorisDeVToolsControllers.Environment.Platforms
         Circular
     }
 
-    public class WaypointPlatformController : MonoBehaviour
+    public class WaypointPlatformController : GameBehaviour
     {
         [Tooltip("In meters/second")] [SerializeField]
         private float _moveSpeed = 2f;
@@ -53,6 +54,9 @@ namespace FlorisDeVToolsControllers.Environment.Platforms
 
         private void FixedUpdate()
         {
+            if(IsPaused)
+                return;
+
             if (_wayPoints.Count < 2)
                 return;
             

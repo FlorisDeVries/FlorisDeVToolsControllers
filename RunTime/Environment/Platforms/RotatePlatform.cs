@@ -1,10 +1,11 @@
+using FlorisDeVToolsFSM.UnityExtensions;
 using FlorisDeVToolsMathLibrary;
 using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Environment.Platforms
 {
     [RequireComponent(typeof(Rigidbody))]
-    public class RotatePlatform : MonoBehaviour
+    public class RotatePlatform : GameBehaviour
     {
         [SerializeField]
         [Range(-360f, 360f)]
@@ -28,6 +29,9 @@ namespace FlorisDeVToolsControllers.Environment.Platforms
 
         public void FixedUpdate()
         {
+            if (IsPaused)
+                return;
+
             angle += _rotationSpeed * Time.deltaTime;
             
             var rotation = Quaternion.Euler(0.0f, angle, 0.0f);

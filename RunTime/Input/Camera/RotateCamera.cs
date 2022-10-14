@@ -1,16 +1,19 @@
+using FlorisDeVToolsFSM.UnityExtensions;
 using FlorisDeVToolsUnityExtensions.HelperFunctions;
 using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Input.Camera
 {
-    public class RotateCamera : BetterMonoBehaviour
+    public class RotateCamera : GameBehaviour
     {
-        [Header("ScriptableObjects")]
-        [SerializeField] private InputHandler _inputHandler = default;
+        [Header("ScriptableObjects")] [SerializeField]
+        private InputHandler _inputHandler = default;
+
         [SerializeField] private CameraDataSo _cameraData = default;
 
-        [Header("Rotation Properties")]
-        [SerializeField] private float _acceleration = 5f;
+        [Header("Rotation Properties")] [SerializeField]
+        private float _acceleration = 5f;
+
         [SerializeField] private float _deceleration = 5f;
         [SerializeField] private float _rotationSpeed = 5f;
 
@@ -44,16 +47,18 @@ namespace FlorisDeVToolsControllers.Input.Camera
 
         private void FixedUpdate()
         {
-            if (!_rotating)
-            {
+            if (IsPaused)
+                return;
+
+            if (!_rotating) 
                 _rotation = 0f;
-            }
 
-            _rotationVelocity = Mathf.Abs(_rotationVelocity) < Mathf.Abs(_rotation) ?
-                Mathf.Lerp(_rotationVelocity, _rotation, _acceleration * Time.fixedDeltaTime) :
-                Mathf.Lerp(_rotationVelocity, _rotation, _deceleration * Time.fixedDeltaTime);
+            _rotationVelocity = Mathf.Abs(_rotationVelocity) < Mathf.Abs(_rotation)
+                ? Mathf.Lerp(_rotationVelocity, _rotation, _acceleration * Time.fixedDeltaTime)
+                : Mathf.Lerp(_rotationVelocity, _rotation, _deceleration * Time.fixedDeltaTime);
 
-            transform.rotation *= Quaternion.Euler(0, 90f * _rotationVelocity * _rotationSpeed * Time.fixedDeltaTime, 0);
+            transform.rotation *=
+                Quaternion.Euler(0, 90f * _rotationVelocity * _rotationSpeed * Time.fixedDeltaTime, 0);
 
             _cameraData.SetYRotation(transform.localEulerAngles.y);
         }

@@ -1,10 +1,11 @@
 using Cinemachine;
+using FlorisDeVToolsFSM.UnityExtensions;
 using FlorisDeVToolsUnityExtensions.HelperFunctions;
 using UnityEngine;
 
 namespace FlorisDeVToolsControllers.Input.Camera
 {
-    public class CameraTracking : BetterMonoBehaviour
+    public class CameraTracking : GameBehaviour
     {
 #pragma warning disable CS0649
         [SerializeField] private Transform _trackingTarget;
@@ -32,10 +33,8 @@ namespace FlorisDeVToolsControllers.Input.Camera
 
         private void Zoom(float zoomValue)
         {
-            if (zoomValue == 0)
-            {
+            if (zoomValue == 0 || IsPaused)
                 return;
-            }
 
             var offset = _followTransposer.m_FollowOffset * (1f - Mathf.Sign(zoomValue) * .1f);
             
